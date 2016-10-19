@@ -13,16 +13,7 @@ import org.junit.Test;
 public class TestUpdate {
     @Test
     public void test() {
-        FundTDownloadTask downloadTask = new FundTDownloadTask();
-        downloadTask.setInvokeClass("com.yum.boh.bmp.task.downloadversion.DownLoadVersionCallBack");
-        downloadTask.setFunParam("bohVersionPackagePath=/LOG/Packages_201506101022.boh, isReDownLoad=0");
-        TemporaryBOHUpdateService bohUpdateService = new TemporaryBOHUpdateService();
-        if(bohUpdateService.doBOHUpdate(downloadTask)) {
-            //logger.info("临时强制升级成功：" + paramStr);
-        }
-        else {
-            //logger.error("临时强制升级成功：" + paramStr);
-        }
+
         Assert.assertTrue(true);
     }
 }
