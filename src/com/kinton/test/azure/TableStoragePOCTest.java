@@ -1,4 +1,4 @@
-package com.kinton.test.com.kinton.test.azure;/**
+package com.kinton.test.azure;/**
  * Created by mgkj1 on 2016/10/19.
  */
 
