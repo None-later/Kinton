@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class TableStoragePOCModel extends TableStoragePOCModelBase{
     String orderID;
-    float price;
+    int price;
     Date orderDate;
     String comment;
     String customerID;
@@ -24,7 +24,10 @@ public class TableStoragePOCModel extends TableStoragePOCModelBase{
 
     String storeCode;
 
-    public TableStoragePOCModel(String orderID, float price, Date orderDate, String comment, String customerID,String storeCode) {
+    public TableStoragePOCModel() {
+    }
+
+    public TableStoragePOCModel(String orderID, int price, Date orderDate, String comment, String customerID, String storeCode) {
         this.orderID = orderID;
         this.price = price;
         this.orderDate = orderDate;
@@ -47,7 +50,7 @@ public class TableStoragePOCModel extends TableStoragePOCModelBase{
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

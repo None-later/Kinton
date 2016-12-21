@@ -3,6 +3,7 @@ package com.kinton.test.azure;/**
  */
 
 import com.kinton.test.azure.com.kinton.test.azure.model.TableStoragePOCModel;
+import com.yum.boh.core.util.StringUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import com.microsoft.azure.storage.*;
@@ -17,10 +18,10 @@ public class TableStoragePOCTest {
                     "AccountName=tablepoc;" +
                     "AccountKey=WQV0e3EApFEHvz0POcH4aD6EB/OI2E2nLWOgswGE3CzYmLBHqTI+bW/a6RekrNauSIIxJqNRSkXkl5Vc9iVjpQ==;" +
                     "EndpointSuffix=core.chinacloudapi.cn";
-    private static final int MAX_BATCH_INSERT_LIMIT = 100;
-    private static final String PARTITION_KEY = "PartitionKey";
-    private static final String ROW_KEY = "RowKey";
-    private static final String TIMESTAMP = "Timestamp";
+    public static final int MAX_BATCH_INSERT_LIMIT = 100;
+    public static final String PARTITION_KEY = "PartitionKey";
+    public static final String ROW_KEY = "RowKey";
+    public static final String TIMESTAMP = "Timestamp";
     //DefaultEndpointsProtocol=https;AccountName=tablepoc;AccountKey=WQV0e3EApFEHvz0POcH4aD6EB/OI2E2nLWOgswGE3CzYmLBHqTI+bW/a6RekrNauSIIxJqNRSkXkl5Vc9iVjpQ==
     @Test
     public void test() {
@@ -29,35 +30,32 @@ public class TableStoragePOCTest {
         System.out.println("【Azure POC】列出创建的表");
         listTable();
         //insert n models to table people
-        int insertCount = 1000;
+        int insertCount = 50000;
         List<TableStoragePOCModel> tableStoragePOCModelList = new ArrayList<>(insertCount);
         TableStoragePOCModel tableStoragePOCModel = null;
         Date currentDate = new Date();
-        String storeCode = "SHA037";
+        String storeCode = "SHA042";
         for(int i=0;i<insertCount;i++) {
-            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),Float.valueOf("20.0"),currentDate,
-                    "testcomment",UUID.randomUUID().toString(),storeCode);
+            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
+                    "testcomment" + i,UUID.randomUUID().toString(),storeCode);
             tableStoragePOCModelList.add(tableStoragePOCModel);
         }
-        System.out.print("start insert models:" + new Date().toString());
+
+        System.out.println("start insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
         insertModels(tableStoragePOCModelList,"people");
-        System.out.print("end insert models:" + new Date().toString());
+        System.out.println("end insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
 
-        System.out.print("start batchinsert models:" + new Date().toString());
-        insertBatchModels(tableStoragePOCModelList,"people");
-        System.out.print("end batchinsert models:" + new Date().toString());
-
-        System.out.print("start query models in partition:" + new Date().toString());
-        Map<String,Object> queryParam = new HashMap<>();
-        queryParam.put("StoreCode","SHA037");
-        Iterable<TableStoragePOCModel> tableStoragePOCModelIterable = queryTableStorageListInPartition(queryParam,"people");
-        if(tableStoragePOCModelIterable!=null) {//测试
-            for(TableStoragePOCModel tableStoragePOCModel1 : tableStoragePOCModelIterable) {
-                System.out.print("query result:" + tableStoragePOCModel.getOrderID() + ",storeCode:" + tableStoragePOCModel.getStoreCode() + ",customerID"
-                + tableStoragePOCModel.getCustomerID() + ",orderDate:" + tableStoragePOCModel.getOrderDate());
-            }
+        tableStoragePOCModelList.clear();
+        for(int i=0;i<insertCount;i++) {
+            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
+                    "testcomment" + i,UUID.randomUUID().toString(),storeCode);
+            tableStoragePOCModelList.add(tableStoragePOCModel);
         }
-        System.out.print("end query models in partition:" + new Date().toString());
+        System.out.println("start batchinsert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
+        insertBatchModels(tableStoragePOCModelList,"people");
+        System.out.println("end batchinsert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
+
+
 
         Assert.assertTrue(true);
     }
@@ -189,51 +187,5 @@ public class TableStoragePOCTest {
         return retValue;
     }
 
-    /**
-     *
-     * @param queryParam
-     * @param tableName
-     * @return
-     */
-    private Iterable<TableStoragePOCModel> queryTableStorageListInPartition(Map<String,Object> queryParam,String tableName) {
-        Iterable<TableStoragePOCModel> tableStoragePOCModelList = null;
-        try
-        {
 
-            // Retrieve storage account from connection-string.
-            CloudStorageAccount storageAccount =
-                    CloudStorageAccount.parse(storageConnectionString);
-
-            // Create the table client.
-            CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-            // Create a cloud table object for the table.
-            CloudTable cloudTable = tableClient.getTableReference(tableName);
-
-            // Create a filter condition where the partition key is "Smith".
-            String partitionFilter = TableQuery.generateFilterCondition(
-                    PARTITION_KEY,//storeCode
-                    QueryComparisons.EQUAL,
-                    queryParam.get("StoreCode").toString());
-
-            // Specify a partition query, using "SHA037" as the partition key filter.
-            TableQuery<TableStoragePOCModel> partitionQuery =
-                    TableQuery.from(TableStoragePOCModel.class)
-                            .where(partitionFilter);
-            tableStoragePOCModelList = cloudTable.execute(partitionQuery);
-            // Loop through the results, displaying information about the entity.
-//            for (TableStoragePOCModel entity : tableStoragePOCModelList) {
-//                System.out.println(entity.getPartitionKey() +
-//                        " " + entity.getRowKey() +
-//                        "\t" + entity.getEmail() +
-//                        "\t" + entity.getPhoneNumber());
-//            }
-        }
-        catch (Exception e)
-        {
-            // Output the stack trace.
-            e.printStackTrace();
-        }
-        return tableStoragePOCModelList;
-    }
 }
