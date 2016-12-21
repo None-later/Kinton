@@ -34,18 +34,18 @@ public class TableStoragePOCTest {
         List<TableStoragePOCModel> tableStoragePOCModelList = new ArrayList<>(insertCount);
         TableStoragePOCModel tableStoragePOCModel = null;
         Date currentDate = new Date();
-        String storeCode = "SHA042";
-        for(int i=0;i<insertCount;i++) {
-            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
-                    "testcomment" + i,UUID.randomUUID().toString(),storeCode);
-            tableStoragePOCModelList.add(tableStoragePOCModel);
-        }
+        String storeCode = "SHA043";
+//        for(int i=0;i<insertCount;i++) {
+//            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
+//                    "testcomment" + i,UUID.randomUUID().toString(),storeCode);
+//            tableStoragePOCModelList.add(tableStoragePOCModel);
+//        }
+//
+//        System.out.println("start insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
+//        insertModels(tableStoragePOCModelList,"people");
+//        System.out.println("end insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
 
-        System.out.println("start insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
-        insertModels(tableStoragePOCModelList,"people");
-        System.out.println("end insert models:" + StringUtil.dateToStr(new Date(),"yyyy-MM-dd HH:mm:ss.SSS"));
-
-        tableStoragePOCModelList.clear();
+//        tableStoragePOCModelList.clear();
         for(int i=0;i<insertCount;i++) {
             tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
                     "testcomment" + i,UUID.randomUUID().toString(),storeCode);
