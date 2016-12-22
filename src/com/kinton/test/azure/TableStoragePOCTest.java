@@ -34,7 +34,7 @@ public class TableStoragePOCTest {
         List<TableStoragePOCModel> tableStoragePOCModelList = new ArrayList<>(insertCount);
         TableStoragePOCModel tableStoragePOCModel = null;
         Date currentDate = new Date();
-        String storeCode = "SHA043";
+        String storeCode = "SHA044";
 //        for(int i=0;i<insertCount;i++) {
 //            tableStoragePOCModel = new TableStoragePOCModel(UUID.randomUUID().toString(),20+i,currentDate,
 //                    "testcomment" + i,UUID.randomUUID().toString(),storeCode);
